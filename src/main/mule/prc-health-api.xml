@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bda10751-d7b0-4925-89fc-60da6b282a4d" basePath="/api">
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="prc-health-apiFlow" doc:id="0f5d4fc8-aa0b-41ef-b6cb-f4d152e738cb" >
+		<http:listener doc:name="Listener" doc:id="fcce0c49-0b3b-4700-a8b5-c7d44773a4a7" config-ref="HTTP_Listener_config" path="/health"/>
+		<logger level="INFO" doc:name="START" doc:id="1a02a478-becb-4322-846c-e2e023d85285" message='#[%dw 2.0&#10;import * from dw::core::Strings&#10;output application/json&#10;---&#10;{&#10;    message: "Start: " ++ (flow.name),&#10;    correlationId: correlationId&#10;}]'/>
+		<ee:transform doc:name="Success Message" doc:id="569a1316-0f04-40ac-bef0-9831d43df34b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Correlation Id" : correlationId,
+	"Message" : " Message Recieved Successfully",
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="END" doc:id="9b7ac822-dab6-4900-b9e2-2ec798d627b2" message='#[%dw 2.0&#10;import * from dw::core::Strings&#10;output application/json&#10;---&#10;{&#10;    message: "End: " ++ (flow.name),&#10;    correlationId: correlationId&#10;}]'/>
+	</flow>
+</mule>
