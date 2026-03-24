@@ -99,28 +99,12 @@ jobs:
               }
             ]
 
-      - name: Set Maven Profile and App Tag
-        run: |
-          if [[ "${{ inputs.repository }}" == *"exp-api"* ]]; then
-            echo "MAVEN_PROFILE=experience-service" >> $GITHUB_ENV
-          else
-            echo "MAVEN_PROFILE=non-experience-service" >> $GITHUB_ENV
-          fi
-          
-          MULE_ENV=$(echo '${{ inputs.environment }}' | tr '[:upper:]' '[:lower:]')
-          if [[ "$MULE_ENV" == "dev" || "$MULE_ENV" == "uat" ]]; then
-            echo "APP_TAG=-$MULE_ENV" >> $GITHUB_ENV
-          else
-            echo "APP_TAG=" >> $GITHUB_ENV
-          fi
-
       - name: Publish to Exchange
         run: |
           mvn clean deploy -DskipTests \
           -D"mule.env"="${{ env.GLOBAL_ENVIRONMENT }}" \
           -D"connectedAppClientId"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_ID }}" \
-          -D"connectedAppClientSecret"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_SECRET }}" \
-          -P"${{ env.MAVEN_PROFILE }}"
+          -D"connectedAppClientSecret"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_SECRET }}" 
 
       - name: Deploy to CloudHub 2.0 (${{ inputs.environment }}) 
         run: |
