@@ -108,10 +108,9 @@ jobs:
 
       - name: Deploy to CloudHub 2.0 (${{ inputs.environment }}) 
         run: |
-          mvn mule:deploy -DskipTests \
+          mvn clean deploy -DskipTests -DmuleDeploy \
           -D"mule.env"="${{ env.GLOBAL_ENVIRONMENT }}" \
           -D"app.vCores"="${{ inputs.vCore }}" \
           -D"app.replicas"="${{ inputs.replicas }}" \
-          -D"app.url.env"="${{ env.APP_TAG }}" \
           -D"connectedAppClientId"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_ID }}" \
           -D"connectedAppClientSecret"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_SECRET }}" 
