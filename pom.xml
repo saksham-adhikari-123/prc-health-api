@@ -23,7 +23,7 @@
 		<ch.deployment.release.channel>LTS</ch.deployment.release.channel>
 		
 		<ch.deployment.grant>client_credentials</ch.deployment.grant>
-		<ch.deployment.application.name>${project.artifactId}-d</ch.deployment.application.name>
+		<ch.deployment.application.name>${project.artifactId}</ch.deployment.application.name>
 		<ch.deployment.replicas>1</ch.deployment.replicas>
 		<ch.deployment.vCores>0.1</ch.deployment.vCores>
 		<ch.deployment.forward.ssl.session>false</ch.deployment.forward.ssl.session>
