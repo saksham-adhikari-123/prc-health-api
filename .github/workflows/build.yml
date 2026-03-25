@@ -98,7 +98,16 @@ jobs:
                 "snapshots": { "enabled": "true" }
               }
             ]
-
+      - name: Build with Maven
+        if: inputs.environment != 'PROD'
+        run: |
+          mvn -B clean package -DskipTests \
+          -D"mule.env"="${{ env.GLOBAL_ENVIRONMENT }}" \
+          -D"environment"="${{ env.GLOBAL_ENVIRONMENT }}" \
+          -D"app.vCores"="${{ inputs.vCore }}" \
+          -D"app.replicas"="${{ inputs.replicas }}" \
+          -D"connectedAppClientId"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_ID }}" \
+          -D"connectedAppClientSecret"="${{ env.GLOBAL_CONNECTED_APP_CLIENT_SECRET }}" \
       - name: Publish to Exchange
         run: |
           mvn clean deploy -DskipTests \
